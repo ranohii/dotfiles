@@ -119,3 +119,6 @@
 
 [url "https://"]
   insteadOf = git://
+[user]
+	email = y_hirano@neuralpocket.com
+	name = Yudai-Hirano
