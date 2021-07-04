@@ -1,3 +1,8 @@
+# Horizontal Git/Htop Splits {{{
+bind-key g split-window -h -p 35 \; send-keys 'g' Enter
+bind-key h split-window -h -p 35 "htop"
+# }}}
+
 # Terminfo — Alacritty {{{
 # set -g default-terminal 'alacritty'
 # set -ga terminal-overrides ',alacritty*:Tc'
@@ -16,15 +21,18 @@
 # }}}
 
 # Night Owl {{{
+# set -g pane-border-style bg=default,fg=$BLACK
+# setw -g window-status-current-style fg="#ffffff",bg=$RED
 # set -g status-style bg="#112630"
 # }}}
 
 # Nord {{{
-# set -g status-style bg="#3b4252"
+set -g status-style bg="#3b4252"
 # }}}
 
 # Oceanic Next {{{
-# set -g status-style bg="#343d46"
+# set -g pane-border-style bg=default,fg="#314e5d"
+# set -g status-style bg="#20343e"
 # }}}
 
 # One Half Dark {{{
