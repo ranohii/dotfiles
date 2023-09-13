@@ -41,3 +41,19 @@ if status is-interactive
     source $DOTFILES/local/config.fish.local
   end
 end
+
+# tabtab source for serverless package
+# uninstall by removing these lines or running `tabtab uninstall serverless`
+[ -f /Users/yudaihirano/.asdf/installs/nodejs/14.17.1/.npm/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.fish ]; and . /Users/yudaihirano/.asdf/installs/nodejs/14.17.1/.npm/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.fish
+# tabtab source for sls package
+# uninstall by removing these lines or running `tabtab uninstall sls`
+[ -f /Users/yudaihirano/.asdf/installs/nodejs/14.17.1/.npm/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.fish ]; and . /Users/yudaihirano/.asdf/installs/nodejs/14.17.1/.npm/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.fish
+# tabtab source for slss package
+# uninstall by removing these lines or running `tabtab uninstall slss`
+[ -f /Users/yudaihirano/.asdf/installs/nodejs/14.17.1/.npm/lib/node_modules/serverless/node_modules/tabtab/.completions/slss.fish ]; and . /Users/yudaihirano/.asdf/installs/nodejs/14.17.1/.npm/lib/node_modules/serverless/node_modules/tabtab/.completions/slss.fish
+# pnpm
+set -gx PNPM_HOME "/Users/yudaihirano/.local/share/pnpm"
+set -gx PATH "$PNPM_HOME" $PATH
+# pnpm end
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/yudaihirano/google-cloud-sdk/path.fish.inc' ]; . '/Users/yudaihirano/google-cloud-sdk/path.fish.inc'; end

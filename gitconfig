@@ -67,6 +67,7 @@
   safecrlf     = warn
   abbrev       = 7
   editor       = nvim
+  quotepath = false
 
 [diff]
   tool = vimdiff3
@@ -102,6 +103,7 @@
 
   # Always create local merge commits when merging.
   ff = false
+	tool = opendiff
 
 [pull]
   # Don't flatten locally created merge commits when rebasing.
@@ -119,3 +121,5 @@
 
 [url "https://"]
   insteadOf = git://
+[credential]
+	helper = osxkeychain
