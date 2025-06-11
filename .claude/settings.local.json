@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(chsh:*)",
+      "Bash(echo $SHELL)"
+    ],
+    "deny": []
+  }
+}

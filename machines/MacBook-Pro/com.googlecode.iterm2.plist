@@ -3519,6 +3519,8 @@
 			<string>No</string>
 			<key>Custom Directory</key>
 			<string>Recycle</string>
+			<key>Custom Locale</key>
+			<string>ja_JP</string>
 			<key>Default Bookmark</key>
 			<string>No</string>
 			<key>Disable Printing</key>
@@ -3900,6 +3902,8 @@
 			<false/>
 			<key>Option Key Sends</key>
 			<integer>2</integer>
+			<key>Prevent Opening in a Tab</key>
+			<false/>
 			<key>Prompt Before Closing 2</key>
 			<integer>0</integer>
 			<key>Right Option Key Sends</key>
@@ -3952,7 +3956,7 @@
 			<key>Send Code When Idle</key>
 			<false/>
 			<key>Set Local Environment Vars</key>
-			<true/>
+			<integer>2</integer>
 			<key>Shortcut</key>
 			<string></string>
 			<key>Show Status Bar</key>
