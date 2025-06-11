@@ -21,7 +21,7 @@ export HOST_NAME
 . $DOTFILES/zsh/oh-my-zsh
 . $DOTFILES/zsh/opts
 . $DOTFILES/zsh/aliases
-. $DOTFILES/zsh/prompt
+# . $DOTFILES/zsh/prompt  # Disabled in favor of starship
 . $DOTFILES/zsh/tmux
 . $DOTFILES/zsh/functions
 . $DOTFILES/zsh/z.sh
@@ -36,7 +36,11 @@ HIST_STAMPS="yyyy-mm-dd"
 
 # asdf
 . $HOME/.asdf/asdf.sh
-. $HOME/.asdf/completions/asdf.bash
+# Load asdf completions for zsh if available, otherwise skip bash completions
+if [[ -f $HOME/.asdf/completions/_asdf ]]; then
+  fpath=(${ASDF_DIR}/completions $fpath)
+  autoload -Uz compinit && compinit
+fi
 
 # Use vi mode
 bindkey -v
@@ -58,11 +62,36 @@ bindkey -M vicmd v edit-command-line
 # Make Vi mode transitions faster (KEYTIMEOUT is in hundredths of a second)
 export KEYTIMEOUT=1
 
+# FZF settings - migrated from fish config
+export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --no-ignore-vcs'
+export FZF_DEFAULT_OPTS='--height 50% --layout=reverse --border'
+export FZF_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
+export FZF_ALT_C_COMMAND='fd --type d . --color=never'
+
+# RIPGREP config
+export RIPGREP_CONFIG_PATH="$DOTFILES/ripgreprc"
+
 # Travis CI
 [ -f ~/.travis/travis.sh ] && . ~/.travis/travis.sh
 
 # Include local settings
 [[ -f ~/.zshrc.local ]] && . ~/.zshrc.local
+
+# Initialize starship prompt
+if command -v starship > /dev/null 2>&1; then
+  eval "$(starship init zsh)"
+fi
+
+# Fish-like syntax highlighting and autosuggestions
+if [[ -f /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]]; then
+  source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+fi
+
+if [[ -f /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
+  source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+  # Fish-like autosuggestion colors
+  ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=8"
+fi
 
 . $HOME/dotfiles/zsh/profiler.stop
 

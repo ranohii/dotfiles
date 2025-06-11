@@ -2,7 +2,15 @@
   "permissions": {
     "allow": [
       "Bash(chsh:*)",
-      "Bash(echo $SHELL)"
+      "Bash(echo $SHELL)",
+      "Bash(ls:*)",
+      "Bash(find:*)",
+      "Bash(tmuxinator:*)",
+      "Bash(zsh:*)",
+      "Bash(starship:*)",
+      "Bash(mkdir:*)",
+      "Bash(ln:*)",
+      "Bash(grep:*)"
     ],
     "deny": []
   }

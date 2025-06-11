@@ -44,4 +44,10 @@ ensure_tmux_is_running() {
 
 # ensure_tmux_is_running
 
-. ~/bin/tmuxinator.zsh
+# Load tmuxinator completion if available
+if [[ -f ~/.asdf/installs/ruby/2.7.1/lib/ruby/gems/2.7.0/gems/tmuxinator-3.0.1/completion/tmuxinator.zsh ]]; then
+  . ~/.asdf/installs/ruby/2.7.1/lib/ruby/gems/2.7.0/gems/tmuxinator-3.0.1/completion/tmuxinator.zsh
+elif command -v tmuxinator > /dev/null 2>&1; then
+  # Try to load from tmuxinator completion command
+  eval "$(tmuxinator completion zsh 2>/dev/null || true)"
+fi

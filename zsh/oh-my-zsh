@@ -8,4 +8,7 @@ history
 yarn
 )
 
-. $ZSH/oh-my-zsh.sh
+# Only load oh-my-zsh if it exists
+if [[ -f "$ZSH/oh-my-zsh.sh" ]]; then
+  . $ZSH/oh-my-zsh.sh
+fi

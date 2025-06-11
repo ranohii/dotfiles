@@ -82,3 +82,130 @@ function n_test_runs() {
   do { time bundle exec rspec ./spec; } 2>> time.txt;
   done
 }
+
+# Add paths to PATH safely, avoiding duplicates
+function addpaths() {
+  for dir in "$@"; do
+    if [[ ":$PATH:" != *":$dir:"* ]]; then
+      PATH="$PATH:$dir"
+    fi
+  done
+  echo "Updated PATH: $PATH"
+}
+
+# Remove paths from PATH safely
+function removepath() {
+  local dir="$1"
+  PATH=":$PATH:"
+  PATH="${PATH//:$dir:/:}"
+  PATH="${PATH/#:/}"
+  PATH="${PATH/%:/}"
+  echo "Updated PATH: $PATH"
+}
+
+# Fuzzy kill processes
+function fkill() {
+  local pid
+  pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
+  
+  if [[ -n "$pid" ]]; then
+    echo "$pid" | xargs kill -9
+  fi
+}
+
+# Smart Brewfile bundling
+function bb() {
+  if [[ -d "$DOTFILES/machines/$HOST_NAME" ]]; then
+    local brewfile_path="$DOTFILES/machines/$HOST_NAME/Brewfile"
+    echo "-> Bundling Brewfile located at $brewfile_path"
+    sleep 2
+    brew bundle --file "$brewfile_path"
+  elif [[ -e "$HOME/Brewfile" ]]; then
+    echo "-> Bundling Brewfile located at $HOME/Brewfile"
+    sleep 2
+    brew bundle --no-lock --file "$HOME/Brewfile"
+  else
+    echo "Brewfile not found."
+  fi
+}
+
+# Create a new tmux session named for current directory, or attach if exists
+function tna() {
+  tmux new-session -As "$(basename "$PWD" | tr . -)"
+}
+
+# Recursively remove .DS_Store files with count
+function dsx() {
+  local count
+  count=$(find . -name "*.DS_Store" -type f | wc -l | tr -d ' ')
+  if [[ $count -gt 0 ]]; then
+    find . -name "*.DS_Store" -type f -delete
+    echo "Removed $count .DS_Store files"
+  else
+    echo "No .DS_Store files found"
+  fi
+}
+
+# Git functions for prompt (oh-my-zsh replacements)
+function git_current_branch() {
+  local ref
+  ref=$(command git symbolic-ref --quiet HEAD 2> /dev/null)
+  local ret=$?
+  if [[ $ret != 0 ]]; then
+    [[ $ret == 128 ]] && return  # no git repo.
+    ref=$(command git rev-parse --short HEAD 2> /dev/null) || return
+  fi
+  echo ${ref#refs/heads/}
+}
+
+function git_prompt_status() {
+  local INDEX STATUS
+  INDEX=$(command git status --porcelain -b 2> /dev/null)
+  STATUS=""
+  
+  if $(echo "$INDEX" | command grep -E '^\?\? ' &> /dev/null); then
+    STATUS="$ZSH_THEME_GIT_PROMPT_UNTRACKED$STATUS"
+  fi
+  if $(echo "$INDEX" | grep '^A  \|^M  \|^MM ' &> /dev/null); then
+    STATUS="$ZSH_THEME_GIT_PROMPT_ADDED$STATUS"
+  fi
+  if $(echo "$INDEX" | grep '^ M \|^AM \|^MM \|^T  ' &> /dev/null); then
+    STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
+  fi
+  if $(echo "$INDEX" | grep '^R  ' &> /dev/null); then
+    STATUS="$ZSH_THEME_GIT_PROMPT_RENAMED$STATUS"
+  fi
+  if $(echo "$INDEX" | grep '^ D \|^D  \|^AD ' &> /dev/null); then
+    STATUS="$ZSH_THEME_GIT_PROMPT_DELETED$STATUS"
+  fi
+  if $(command git rev-parse --verify refs/stash >/dev/null 2>&1); then
+    STATUS="$ZSH_THEME_GIT_PROMPT_STASHED$STATUS"
+  fi
+  if $(echo "$INDEX" | grep '^UU ' &> /dev/null); then
+    STATUS="$ZSH_THEME_GIT_PROMPT_UNMERGED$STATUS"
+  fi
+  echo $STATUS
+}
+
+function git_prompt_short_sha() {
+  local SHA
+  SHA=$(command git rev-parse --short HEAD 2> /dev/null) && echo "$ZSH_THEME_GIT_PROMPT_SHA_BEFORE$SHA$ZSH_THEME_GIT_PROMPT_SHA_AFTER"
+}
+
+function git_commits_ahead() {
+  if command git rev-parse --git-dir &>/dev/null; then
+    local commits="$(git rev-list --count @{upstream}..HEAD 2>/dev/null)"
+    if [[ -n "$commits" && "$commits" != 0 ]]; then
+      echo "$ZSH_THEME_GIT_COMMITS_AHEAD_PREFIX$commits$ZSH_THEME_GIT_COMMITS_AHEAD_SUFFIX"
+    fi
+  fi
+}
+
+function git_commits_behind() {
+  if command git rev-parse --git-dir &>/dev/null; then
+    local commits="$(git rev-list --count HEAD..@{upstream} 2>/dev/null)"
+    if [[ -n "$commits" && "$commits" != 0 ]]; then
+      echo "$ZSH_THEME_GIT_COMMITS_BEHIND_PREFIX$commits$ZSH_THEME_GIT_COMMITS_BEHIND_SUFFIX"
+    fi
+  fi
+}
