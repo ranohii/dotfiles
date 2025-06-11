@@ -18,6 +18,10 @@ export DOTFILES="$HOME/dotfiles"
 HOST_NAME=$(scutil --get HostName)
 export HOST_NAME
 
+# Locale settings
+export LANG="ja_JP.UTF-8"
+export LC_ALL="ja_JP.UTF-8"
+
 . $DOTFILES/zsh/oh-my-zsh
 . $DOTFILES/zsh/opts
 . $DOTFILES/zsh/aliases
@@ -91,7 +95,14 @@ if [[ -f /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
   source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
   # Fish-like autosuggestion colors
   ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=8"
+  # Enable autosuggestion strategy
+  ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 fi
+
+# Better completion system
+autoload -Uz compinit && compinit
+zstyle ':completion:*' menu select
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
 
 . $HOME/dotfiles/zsh/profiler.stop
 
