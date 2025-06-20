@@ -1,6 +1,6 @@
 ruby 3.0.1
 nodejs 20.14.0
 ghq 1.2.1
-python 3.10.12
+python 3.9.2
 rust stable
 terraform 1.10.1

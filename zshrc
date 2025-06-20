@@ -31,6 +31,11 @@ export LC_ALL="ja_JP.UTF-8"
 . $DOTFILES/zsh/z.sh
 . $DOTFILES/zsh/ranger.sh
 
+# Load peco functions if peco is installed
+if command -v peco > /dev/null 2>&1; then
+  . $DOTFILES/zsh/peco-functions.zsh
+fi
+
 cdpath=($HOME/code $DOTFILES $HOME/Developer $HOME/Sites $HOME/Dropbox $HOME)
 
 HISTSIZE=1000000
@@ -71,6 +76,42 @@ export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --no-ignore-vcs'
 export FZF_DEFAULT_OPTS='--height 50% --layout=reverse --border'
 export FZF_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
 export FZF_ALT_C_COMMAND='fd --type d . --color=never'
+
+# Peco configuration
+if command -v peco > /dev/null 2>&1; then
+  # History search with peco (Ctrl+R)
+  function peco-history-selection() {
+    BUFFER=`history -n 1 | tail -r | peco --query "$LBUFFER"`
+    CURSOR=$#BUFFER
+    zle reset-prompt
+  }
+  zle -N peco-history-selection
+  bindkey '^r' peco-history-selection
+
+  # Directory navigation with peco
+  function peco-cdr () {
+    local selected_dir=$(cdr -l | awk '{ print $2 }' | peco)
+    if [ -n "$selected_dir" ]; then
+      BUFFER="cd ${selected_dir}"
+      zle accept-line
+    fi
+    zle clear-screen
+  }
+  zle -N peco-cdr
+  bindkey '^x^d' peco-cdr
+
+  # ghq repository navigation with peco
+  function peco-ghq-widget() {
+    local selected_dir=$(ghq list | peco --query "$LBUFFER")
+    if [ -n "$selected_dir" ]; then
+      BUFFER="cd $(ghq root)/$selected_dir"
+      zle accept-line
+    fi
+    zle clear-screen
+  }
+  zle -N peco-ghq-widget
+  bindkey '^g' peco-ghq-widget
+fi
 
 # RIPGREP config
 export RIPGREP_CONFIG_PATH="$DOTFILES/ripgreprc"
