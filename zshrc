@@ -65,8 +65,8 @@ bindkey "^[OB" down-line-or-beginning-search
 bindkey -M vicmd "k" up-line-or-beginning-search
 bindkey -M vicmd "j" down-line-or-beginning-search
 
-# Easier, more vim-like editor opening
-bindkey -M vicmd v edit-command-line
+# Visual mode for zsh
+bindkey -M vicmd v visual-mode
 
 # Make Vi mode transitions faster (KEYTIMEOUT is in hundredths of a second)
 export KEYTIMEOUT=1
